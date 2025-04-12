@@ -355,27 +355,30 @@
     - chatnormal|toggle
     - chatshout|toggle
 
-#- command: clear
-#  type: ToDo
-#  description: |
-#      To Do
-#  syntax: "@To Do"
+- command: clear
+  type: immediate
+  description: |
+      This command clears all the restrictions and exceptions tied the object the script that issued the command is in
+      A good example would be "@clear=tp" which clears all the teleport restrictions and exceptions tied to that object, whereas "@clear=tplure:" would only clear the exceptions to the "teleport-by-friend" restriction.
+  syntax: "@clear"
+  notes: |
+      When triggered on detach by default, this might prevent the automatic reattach when @defaultwear is active, as @clear will also lift @detach=n, thus the viewer thinks the item that gets detached by accident by a default-wear-action is unlocked and will not reattach it. 
 #  related_commands:
 #    - To Do
 
-#- command: clear
-#  type: ToDo
-#  description: |
-#      To Do
-#  syntax: "@To Do"
+- command: clear
+  type: immediate_param
+  description: |
+      This command clears all the restrictions, containing the search pattern, tied the object the script that issued the command is in.
+  syntax: "@clear=<string>"
 #  related_commands:
 #    - To Do
 
-#- command: detach
-#  type: ToDo
-#  description: |
-#      To Do
-#  syntax: "@To Do"
+- command: detach
+  type: toggle
+  description: |
+      When called with the "n" option, the object sending this message (which must be an attachment) will be made nondetachable. It can be detached again when the "y" option is called.
+  syntax: "@detach=<y/n>"
 #  related_commands:
 #    - To Do
 
@@ -461,6 +464,7 @@
     - edit|exception
     - editattach|toggle
     - editworld|toggle
+    - editobj|toggle
 
 - command: edit
   type: exception
@@ -472,6 +476,7 @@
     - edit|toggle
     - editattach|toggle
     - editworld|toggle
+    - editobj|toggle
 
 - command: editattach
   type: toggle
@@ -483,13 +488,13 @@
     - edit|toggle
     - editworld|toggle
 
-#- command: editobj
-#  type: ToDo
-#  description: |
-#      To Do
-#  syntax: "@To Do"
-#  related_commands:
-#    - To Do
+- command: editobj
+  type: toggle
+  description: |
+      When prevented, the Build & Edit window will refuse to open when trying to edit or open the specified object. 
+  syntax: "@editobj:<UUID>=<y/n>"
+  related_commands:
+    - edit|toggle
 
 - command: editworld
   type: toggle
@@ -501,11 +506,13 @@
     - edit|toggle
     - editattach|toggle
 
-#- command: emote
-#  type: ToDo
-#  description: |
-#      To Do
-#  syntax: "@To Do"
+- command: emote
+  type: exception
+  description: |
+      When adding this exception, the emotes are not truncated anymore (however, special signs will still discard the message).
+  syntax: "@emote=<rem/add>"
+  notes: |
+      Might be deprecated and was only added to work around a bug?
 #  related_commands:
 #    - To Do
 
@@ -1433,21 +1440,27 @@
   related_commands:
     - showminimap|toggle
 
-#- command: sit
-#  type: ToDo
-#  description: |
-#      To Do
-#  syntax: "@To Do"
-#  related_commands:
-#    - To Do
+- command: sit
+  type: toggle
+  description: |
+      Prevents the user from sitting on anything, including with @sit:<UUID>=force.
+  syntax: "@sit=<y/n>"
+  related_commands:
+    - sit|force
+    - unsit|toggle
+    - unsit|force
 
-#- command: sit
-#  type: ToDo
-#  description: |
-#      To Do
-#  syntax: "@To Do"
-#  related_commands:
-#    - To Do
+- command: sit
+  type: force
+  description: |
+      Forces avatar to sit on <UUID>.
+  syntax: "@sit:<UUID>=force"
+  notes: |
+      Does not work if the user is prevented from sit-tping and further than 1.5 meters away, or when prevented from unsitting.
+  related_commands:
+    - sit|toggle
+    - unsit|toggle
+    - unsit|force
 
 #- command: sitground
 #  type: ToDo
@@ -1659,21 +1672,27 @@
 #  related_commands:
 #    - To Do
 
-#- command: unsit
-#  type: ToDo
-#  description: |
-#      To Do
-#  syntax: "@To Do"
-#  related_commands:
-#    - To Do
+- command: unsit
+  type: toggle
+  description: |
+      Hides the Stand up button. From v1.15 it also prevents teleporting, which was a way to stand up.
+  syntax: "@unsit=<y/n>"
+  related_commands:
+    - unsit|force
+    - sit|toggle
+    - sit|force
 
-#- command: unsit
-#  type: ToDo
-#  description: |
-#      To Do
-#  syntax: "@To Do"
-#  related_commands:
-#    - To Do
+- command: unsit
+  type: force
+  description: |
+      Force avatar to stand up.
+  syntax: "@unsit=force"
+  notes: |
+      Do not group @unsit=force and @sit:<seat_uuid>=force in the same command line (llOwnerSay()), and always allow for at least one second pause before sending such opposite commands, else you will most likely run into failures, especially for overseas residents (250ms or more "ping" between viewer and server, meaning the @sit/@unsit will need at least 500ms to be effective) and/or when the sim lag is high.
+  related_commands:
+    - unsit|toggle
+    - sit|toggle
+    - sit|force
 
 - command: version
   type: reply
